@@ -15,7 +15,7 @@ jobs:
         with:
           node-version: '18'
       - name: Update deps
-         run: npm update
+        run: npm update
 
        #Install dependencies from package.json
       - name: Install dependencies
