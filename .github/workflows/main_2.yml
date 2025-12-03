@@ -1,0 +1,39 @@
+on: [push]
+
+jobs:
+  depchecktest:
+    runs-on: ubuntu-latest
+    name: depecheck_test
+    steps:
+       #pulling repository code into GitHub Actions Runner
+      - name: Checkout		
+        uses: actions/checkout@v2
+
+       #Setting up Node.js within the GitHub Actions Runner
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+       #Install dependencies from package.json
+      - name: Install dependencies
+        run: npm install
+
+       #Run OWASP Depcheck
+      - name: Depcheck
+        uses: dependency-check/Dependency-Check_Action@main
+        id: Depcheck
+        with:
+          project: 'sca_devsecops'
+          path: '.'
+          format: 'HTML'
+          out: 'reports'
+          args: >
+            --enableRetired
+
+       #Upload Results
+      - name: Upload Test results
+        uses: actions/upload-artifact@master
+        with:
+           name: Depcheck report
+           path: ${{github.workspace}}/reports
